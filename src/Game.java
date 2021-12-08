@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Game extends JFrame {
-    private JPanel pMain;
+    private JPanel pMain = new JPanel();
     private JLabel round = new JLabel();
     private JLabel Score = new JLabel();
     private JPanel player = new JPanel();
@@ -14,8 +14,18 @@ public class Game extends JFrame {
     private JButton papier = new JButton();
     private int counter = 0;
     private int random;
+    private int playerScore;
 
     public Game(){
+        Icon cpuscissor = new ImageIcon("media/cpuscissor.png");
+        Icon playerscissor = new ImageIcon("media/playerscissor.png");
+        Icon rock = new ImageIcon("media/Rock.png");
+        Icon paper = new ImageIcon("media/paper.png");
+        JLabel Lcpuscissor = new JLabel(cpuscissor);
+        JLabel Lplayerscissor = new JLabel(playerscissor);
+        JLabel Lrock = new JLabel(rock);
+        JLabel Lpaper = new JLabel(paper);
+        
         round.setSize(100, 20);
         round.setBackground(Color.lightGray);
         round.setLocation(400, 0);
@@ -66,28 +76,82 @@ public class Game extends JFrame {
         schere.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                 counter = 0;
-                 random = (int) (Math.random() * 3);
-                 if(counter == random){
+                new Thread(){
+                    public void run(){
+                        counter = 0;
+                        random = (int) (Math.random() * 3);
 
-                 } else if(counter == 0 && random == 1){
-                     Score.setText("Der CPU hat gewonnen");
-                     try{
-                         Thread.sleep(100);
-                         Score.setText("Score: ");
-                     } catch (InterruptedException interruptedException) {
-                         interruptedException.printStackTrace();
-                     }
-                 } else{
-                     Score.setText("Du hast gewonnen");
-                     try{
-                         Thread.sleep(100);
-                         Score.setText("Score: ");
-                     } catch (InterruptedException interruptedException) {
-                         interruptedException.printStackTrace();
-                     }
-                 }
+                        player.add(Lplayerscissor);
+                        
+                        if(counter == random){
+                            cpu.add(Lcpuscissor);
+                        } else if(counter == 0 && random == 1){
+                            cpu.add(Lrock);
+                            Score.setSize(200, 20);
+                            Score.setText("Score: " + playerScore);
+                        } else{
+                            cpu.add(Lpaper);
+                            Score.setSize(200,20);
+                            playerScore++;
+                            Score.setText("Score: " + playerScore);
+                        }
+                    }
+                    }.start();
+                }
+
+        });
+
+        stein.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Thread(){
+                    public void run(){
+                        counter = 1;
+                        random = (int) (Math.random() * 3);
+
+                        player.add(Lrock);
+                        if(counter == random){
+                            cpu.add(Lrock);
+                        } else if(counter == 1 && random == 2){
+                            cpu.add(Lpaper);
+                            Score.setSize(200,20);
+                            Score.setText("Score: " + playerScore);
+                        } else{
+                            cpu.add(Lcpuscissor);
+                            Score.setSize(200,20);
+                            playerScore++;
+                            Score.setText("Score: " + playerScore);
+                        }
+                    }
+                }.start();
             }
+
+        });
+
+        papier.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Thread(){
+                    public void run(){
+                        counter = 2;
+                        random = (int) (Math.random() * 3);
+                        player.add(Lpaper);
+                        if(counter == random){
+                            cpu.add(Lpaper);
+                        } else if(counter == 2 && random == 0){
+                            cpu.add(Lcpuscissor);
+                            Score.setSize(200,20);
+                            Score.setText("Score: " + playerScore);
+                        } else{
+                            cpu.add(Lrock);
+                            Score.setSize(200,20);
+                            playerScore++;
+                            Score.setText("Score: " + playerScore);
+                        }
+                    }
+                }.start();
+            }
+
         });
 
 
